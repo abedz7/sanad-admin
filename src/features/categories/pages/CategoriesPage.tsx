@@ -11,6 +11,7 @@ import { useToast } from '../../../components/ui/Toast'
 import { cn } from '../../../lib/cn'
 import { formatDate } from '../../../lib/dates'
 import type { AdminCategory } from '../../../types/api'
+import { CategoryCardList } from '../components/CategoryCardList'
 import { CategoryFormDialog } from '../components/CategoryFormDialog'
 import { useAdminCategories, useDeleteCategory } from '../hooks'
 
@@ -135,7 +136,14 @@ export function CategoriesPage() {
             }
           />
         ) : (
-          <DataTable columns={columns} rows={categories.data} rowKey={(c) => c.id} />
+          <>
+            <div className="hidden md:block">
+              <DataTable columns={columns} rows={categories.data} rowKey={(c) => c.id} />
+            </div>
+            <div className="md:hidden">
+              <CategoryCardList categories={categories.data} onEdit={openEdit} onDelete={setDeleting} />
+            </div>
+          </>
         ))}
 
       <CategoryFormDialog

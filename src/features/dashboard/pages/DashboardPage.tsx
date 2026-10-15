@@ -27,7 +27,7 @@ function StatTile({ status, count }: { status: Status; count: number }) {
 
 function StatTiles({ byStatus }: { byStatus: Stats['byStatus'] }) {
   return (
-    <div className="grid grid-cols-4 divide-x divide-border border border-border bg-surface-0 shadow-elevation-1">
+    <div className="grid grid-cols-2 divide-y divide-border border border-border bg-surface-0 shadow-elevation-1 md:grid-cols-4 md:divide-x md:divide-y-0">
       {statusOrder.map((status) => (
         <StatTile key={status} status={status} count={byStatus[status]} />
       ))}
@@ -109,7 +109,7 @@ function StatsSection() {
   if (stats.isPending) {
     return (
       <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-4 divide-x divide-border border border-border bg-surface-0">
+        <div className="grid grid-cols-2 divide-y divide-border border border-border bg-surface-0 md:grid-cols-4 md:divide-x md:divide-y-0">
           {statusOrder.map((status) => (
             <div key={status} className="p-4">
               <Skeleton className="h-4 w-20" />
@@ -117,7 +117,7 @@ function StatsSection() {
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {[0, 1].map((panel) => (
             <div key={panel} className="border border-border bg-surface-0 p-4">
               <Skeleton className="mb-3 h-4 w-24" />
@@ -150,7 +150,7 @@ function StatsSection() {
   return (
     <div className="flex flex-col gap-4">
       <StatTiles byStatus={stats.data.byStatus} />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <PriorityBars byPriority={stats.data.byPriority} />
         <OpenAge openAge={stats.data.openAge} createdLast7Days={stats.data.createdLast7Days} />
       </div>

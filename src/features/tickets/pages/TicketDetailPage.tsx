@@ -86,7 +86,7 @@ export function TicketDetailPage() {
         </p>
       </header>
 
-      <div className="mb-4 flex flex-wrap items-center gap-x-6 gap-y-3 border border-border bg-surface-0 p-3">
+      <div className="mb-4 flex flex-wrap items-center gap-x-6 gap-y-3 border border-border bg-surface-0 p-3 shadow-elevation-1">
         <StatusControl ticket={data} />
         <div className="flex flex-wrap items-center gap-4">
           <label className="flex items-center gap-2 text-sm text-text-muted">

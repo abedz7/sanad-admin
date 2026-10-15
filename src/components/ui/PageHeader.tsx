@@ -8,7 +8,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, action }: PageHeaderProps) {
   return (
-    <header className="-mx-6 -mt-5 mb-4 flex items-start justify-between gap-4 border-b border-border bg-accent-tint px-6 py-4">
+    <header className="-mx-4 -mt-4 mb-4 flex items-start justify-between gap-4 border-b border-border bg-accent-tint px-4 py-3 md:-mx-6 md:-mt-5 md:px-6 md:py-4">
       <div>
         <h1 className="text-lg font-semibold text-text">{title}</h1>
         {description && <p className="mt-0.5 text-sm text-text-muted">{description}</p>}

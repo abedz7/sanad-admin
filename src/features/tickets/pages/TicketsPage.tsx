@@ -11,6 +11,7 @@ import { timeAgo } from '../../../lib/dates'
 import { priorityOrder, statusOrder } from '../../../lib/labels'
 import type { Priority, SortKey, Status, TicketListItem } from '../../../types/api'
 import { FilterBar } from '../components/FilterBar'
+import { TicketCardList } from '../components/TicketCardList'
 import { useTickets } from '../hooks'
 
 const SORT_KEYS: SortKey[] = ['createdAt', '-createdAt', 'lastActivityAt', '-lastActivityAt', 'priority', '-priority']
@@ -143,15 +144,20 @@ export function TicketsPage() {
           />
         ) : (
           <>
-            <DataTable
-              columns={columns}
-              rows={tickets.data.data}
-              rowKey={(t) => t.id}
-              sort={sort}
-              onSortChange={(next) => updateParams({ sort: next })}
-              onRowClick={(t) => void navigate(`/tickets/${t.id}`)}
-              rowAccent={(t) => statusRowAccent[t.status]}
-            />
+            <div className="hidden md:block">
+              <DataTable
+                columns={columns}
+                rows={tickets.data.data}
+                rowKey={(t) => t.id}
+                sort={sort}
+                onSortChange={(next) => updateParams({ sort: next })}
+                onRowClick={(t) => void navigate(`/tickets/${t.id}`)}
+                rowAccent={(t) => statusRowAccent[t.status]}
+              />
+            </div>
+            <div className="md:hidden">
+              <TicketCardList tickets={tickets.data.data} />
+            </div>
             <Pagination
               meta={tickets.data.meta}
               onPageChange={(nextPage) =>

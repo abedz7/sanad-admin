@@ -59,9 +59,10 @@ export function FilterBar({
   }
 
   return (
-    <div className="mb-3 flex flex-wrap items-center gap-2">
+    <div className="mb-3 grid grid-cols-2 gap-2 md:flex md:flex-wrap md:items-center">
       <Select
         aria-label="Filter by status"
+        className="max-md:w-full"
         value={status ?? ALL}
         onValueChange={(value) => onChange({ status: value === ALL ? undefined : value })}
         options={[
@@ -71,6 +72,7 @@ export function FilterBar({
       />
       <Select
         aria-label="Filter by priority"
+        className="max-md:w-full"
         value={priority ?? ALL}
         onValueChange={(value) => onChange({ priority: value === ALL ? undefined : value })}
         options={[
@@ -80,6 +82,7 @@ export function FilterBar({
       />
       <Select
         aria-label="Filter by category"
+        className="max-md:w-full"
         value={categoryId ?? ALL}
         disabled={!categories.isSuccess}
         onValueChange={(value) => onChange({ categoryId: value === ALL ? undefined : value })}
@@ -90,6 +93,7 @@ export function FilterBar({
       />
       <Select
         aria-label="Filter by assignee"
+        className="max-md:w-full"
         value={assigneeId ?? ALL}
         disabled={!admins.isSuccess || unassigned}
         onValueChange={(value) => onChange({ assigneeId: value === ALL ? undefined : value })}
@@ -116,7 +120,7 @@ export function FilterBar({
         type="search"
         aria-label="Search tickets"
         placeholder="Search title or description"
-        className="w-64"
+        className="col-span-2 w-full md:w-64"
         value={searchDraft}
         onChange={(event) => onSearchChange(event.target.value)}
       />
