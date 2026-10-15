@@ -7,6 +7,15 @@ export function timeAgo(iso: string): string {
   return `${Math.floor(seconds / 86_400)}d`
 }
 
+/** Fractional hours → "1d 7h" / "7h" / "45m". */
+export function formatHours(hours: number): string {
+  if (hours < 1) return `${Math.round(hours * 60)}m`
+  const days = Math.floor(hours / 24)
+  const rest = Math.round(hours % 24)
+  if (days === 0) return `${rest}h`
+  return rest === 0 ? `${days}d` : `${days}d ${rest}h`
+}
+
 export function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString(undefined, {
     year: 'numeric',

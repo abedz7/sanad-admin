@@ -1,9 +1,91 @@
+import { Link } from 'react-router-dom'
+import { EmptyState } from '../../../components/states/EmptyState'
 import { ErrorState } from '../../../components/states/ErrorState'
 import { Skeleton } from '../../../components/states/Skeleton'
 import { PageHeader } from '../../../components/ui/PageHeader'
+import { formatHours } from '../../../lib/dates'
 import { priorityLabels, priorityOrder, statusLabels, statusOrder } from '../../../lib/labels'
+import type { Stats } from '../../../types/api'
 import { useAdminUsers } from '../../users/hooks'
 import { useStats } from '../hooks'
+
+function StatTiles({ byStatus }: { byStatus: Stats['byStatus'] }) {
+  return (
+    <div className="grid grid-cols-4 divide-x divide-border border border-border bg-surface-0">
+      {statusOrder.map((status) => (
+        <Link
+          key={status}
+          to={`/tickets?status=${status}`}
+          className="p-4 hover:bg-surface-2"
+          aria-label={`${statusLabels[status].label} tickets`}
+        >
+          <p className="text-sm text-text-muted">{statusLabels[status].label}</p>
+          <p className="mt-1 text-xl font-semibold tabular-nums text-text">{byStatus[status]}</p>
+        </Link>
+      ))}
+    </div>
+  )
+}
+
+/** Plain divs sized from the numbers — no chart library (docs/DECISIONS.md). */
+function PriorityBars({ byPriority }: { byPriority: Stats['byPriority'] }) {
+  const max = Math.max(1, ...priorityOrder.map((p) => byPriority[p]))
+  return (
+    <section className="border border-border bg-surface-0 p-4">
+      <h2 className="mb-3 text-sm font-medium text-text-muted">By priority</h2>
+      <dl className="flex flex-col gap-2">
+        {priorityOrder.map((priority) => (
+          <div key={priority} className="grid grid-cols-[72px_1fr_40px] items-center gap-2">
+            <dt className="text-sm text-text">{priorityLabels[priority].label}</dt>
+            <dd className="h-4 rounded-md bg-surface-2">
+              <div
+                className={`h-4 rounded-md ${priorityLabels[priority].barClassName}`}
+                style={{ width: `${(byPriority[priority] / max) * 100}%` }}
+              />
+            </dd>
+            <dd className="text-right text-sm font-medium tabular-nums text-text">
+              {byPriority[priority]}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  )
+}
+
+function OpenAge({ openAge, createdLast7Days }: Pick<Stats, 'openAge' | 'createdLast7Days'>) {
+  return (
+    <section className="border border-border bg-surface-0 p-4">
+      <h2 className="mb-3 text-sm font-medium text-text-muted">Open age</h2>
+      <dl className="flex flex-col gap-2 text-base text-text">
+        <div className="flex justify-between">
+          <dt>Open or in progress</dt>
+          <dd className="font-medium tabular-nums">{openAge.count}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt>Average age</dt>
+          <dd className="font-medium tabular-nums">{formatHours(openAge.averageHours)}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt>Oldest</dt>
+          <dd className="font-medium tabular-nums">
+            {openAge.oldestTicketId ? (
+              <Link to={`/tickets/${openAge.oldestTicketId}`} className="text-accent hover:text-accent-strong">
+                {formatHours(openAge.maxHours)}
+              </Link>
+            ) : (
+              formatHours(openAge.maxHours)
+            )}
+          </dd>
+        </div>
+        <div className="flex justify-between border-t border-border pt-2">
+          <dt>Created in the last 7 days</dt>
+          <dd className="font-medium tabular-nums">{createdLast7Days}</dd>
+        </div>
+      </dl>
+    </section>
+  )
+}
 
 function StatsSection() {
   const stats = useStats()
@@ -25,61 +107,27 @@ function StatsSection() {
     return <ErrorState error={stats.error} onRetry={() => void stats.refetch()} />
   }
 
-  const { byStatus, byPriority, openAge, createdLast7Days, total } = stats.data
+  if (stats.data.total === 0) {
+    return (
+      <EmptyState
+        title="No tickets yet"
+        description="Stats appear as soon as the first ticket is created from the mobile app."
+      />
+    )
+  }
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-4 divide-x divide-border border border-border bg-surface-0">
-        {statusOrder.map((status) => (
-          <div key={status} className="p-4">
-            <p className="text-sm text-text-muted">{statusLabels[status].label}</p>
-            <p className="mt-1 text-xl font-semibold tabular-nums text-text">{byStatus[status]}</p>
-          </div>
-        ))}
-      </div>
+      <StatTiles byStatus={stats.data.byStatus} />
       <div className="grid grid-cols-2 gap-4">
-        <section className="border border-border bg-surface-0 p-4">
-          <h2 className="mb-3 text-sm font-medium text-text-muted">By priority</h2>
-          <dl className="flex flex-col gap-2">
-            {priorityOrder.map((priority) => (
-              <div key={priority} className="flex items-center justify-between">
-                <dt className="text-base text-text">{priorityLabels[priority].label}</dt>
-                <dd className="text-base font-medium tabular-nums text-text">{byPriority[priority]}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-        <section className="border border-border bg-surface-0 p-4">
-          <h2 className="mb-3 text-sm font-medium text-text-muted">Open tickets age</h2>
-          <dl className="flex flex-col gap-2 text-base text-text">
-            <div className="flex justify-between">
-              <dt>Open or in progress</dt>
-              <dd className="font-medium tabular-nums">{openAge.count}</dd>
-            </div>
-            <div className="flex justify-between">
-              <dt>Average age</dt>
-              <dd className="font-medium tabular-nums">{openAge.averageHours.toFixed(1)}h</dd>
-            </div>
-            <div className="flex justify-between">
-              <dt>Oldest</dt>
-              <dd className="font-medium tabular-nums">{openAge.maxHours.toFixed(1)}h</dd>
-            </div>
-            <div className="flex justify-between">
-              <dt>Created last 7 days</dt>
-              <dd className="font-medium tabular-nums">{createdLast7Days}</dd>
-            </div>
-            <div className="flex justify-between border-t border-border pt-2">
-              <dt>Total tickets</dt>
-              <dd className="font-medium tabular-nums">{total}</dd>
-            </div>
-          </dl>
-        </section>
+        <PriorityBars byPriority={stats.data.byPriority} />
+        <OpenAge openAge={stats.data.openAge} createdLast7Days={stats.data.createdLast7Days} />
       </div>
     </div>
   )
 }
 
-/** The one data path that is live before server Phase 2. */
+/** Live before server Phase 2; also the roster behind the assignee picker. */
 function TeamPanel() {
   const admins = useAdminUsers({ role: 'admin' })
 

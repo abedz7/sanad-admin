@@ -19,11 +19,11 @@ export const statusLabels: Record<Status, LabelDef> = {
   closed: { label: 'Closed', className: 'text-status-closed bg-status-closed-bg' },
 }
 
-export const priorityLabels: Record<Priority, LabelDef> = {
-  low: { label: 'Low', className: 'text-priority-low bg-priority-low-bg' },
-  medium: { label: 'Medium', className: 'text-priority-medium bg-priority-medium-bg' },
-  high: { label: 'High', className: 'text-priority-high bg-priority-high-bg' },
-  urgent: { label: 'Urgent', className: 'text-priority-urgent bg-priority-urgent-bg' },
+export const priorityLabels: Record<Priority, LabelDef & { barClassName: string }> = {
+  low: { label: 'Low', className: 'text-priority-low bg-priority-low-bg', barClassName: 'bg-priority-low' },
+  medium: { label: 'Medium', className: 'text-priority-medium bg-priority-medium-bg', barClassName: 'bg-priority-medium' },
+  high: { label: 'High', className: 'text-priority-high bg-priority-high-bg', barClassName: 'bg-priority-high' },
+  urgent: { label: 'Urgent', className: 'text-priority-urgent bg-priority-urgent-bg', barClassName: 'bg-priority-urgent' },
 }
 
 export interface AdminTransition {
