@@ -41,10 +41,9 @@ Other scripts: `npm run lint` · `npm run typecheck` · `npm run build` · `npm 
 
 Only accounts with `role: "admin"` can sign in on the web client.
 
-- **After server Phase 2:** run `npm run seed` in `sanad-server` and use the demo admin it prints
-  (email only; the password comes from the server's `.env`).
-- **Before the seed exists:** register a user via `POST /auth/register` and flip its `role` to
-  `"admin"` directly in Mongo.
+Run `npm run seed` in `sanad-server` (idempotent) and sign in as the demo admin
+**`admin@sanad.demo`** — the password comes from `SEED_ADMIN_PASSWORD` in the server's `.env` and
+is never printed or committed.
 
 Session model: 15-minute access token in memory, silent restore on reload via the httpOnly
 refresh cookie, automatic single-flight refresh on 401, redirect to sign-in with a notice when
@@ -59,22 +58,19 @@ its own origin — exactly the shape the Vite dev proxy gives locally — so the
 relaxation. `VITE_API_URL` is not used on Vercel (it only feeds the dev proxy); the rewrite
 points at the deployed API (`sanad-server-production-8573.up.railway.app`).
 
-## Current scope (Phase 3b)
+## Current scope (Phase 3b — complete, verified against the seeded server)
 
-Everything is built against API contract **1.1.0** (`docs/API.md`):
-
-- **Fully live today:** sign-in and session handling, app shell, category management
-  (create / edit / soft delete / show-deleted, with 409 handling), the dashboard Team panel.
-- **Built and waiting for the server:** dashboard stats, the ticket list (filters, search, sort,
-  pagination — all URL-synced) and the ticket detail (status machine controls, assignee/priority/
-  category, conversation with internal notes, authenticated attachment downloads, history
-  timeline). Until the server's ticket/stats endpoints land these screens render their real error
-  state — loading, empty and error states are genuine, no mock data.
+Everything is built against API contract **1.1.0** (`docs/API.md`) and verified live: sign-in and
+session handling; dashboard with stat tiles (linked to the filtered list), priority breakdown,
+open-age block and Team panel; ticket list with URL-synced filters, debounced search, sort and
+pagination; ticket detail with status-machine controls, assignee/priority/category editing,
+conversation with internal notes, authenticated attachment downloads and the history timeline;
+category management with create/edit/soft-delete and 409 handling. Loading, empty and error states
+are real throughout — no mock data anywhere.
 
 ## Screenshots
 
-Current state, in [`docs/screenshots/`](docs/screenshots) — refreshed against the seeded server
-once the server's seed script lands:
+Taken against the seeded server, in [`docs/screenshots/`](docs/screenshots):
 
 | | |
 |---|---|
