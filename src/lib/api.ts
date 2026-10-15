@@ -69,7 +69,7 @@ export function toApiError(error: unknown): ApiError {
 // rotated refresh token is used exactly once.
 let refreshPromise: Promise<string> | null = null
 
-function refreshAccessToken(): Promise<string> {
+export function refreshAccessToken(): Promise<string> {
   if (!refreshPromise) {
     // Bare axios: the instance's interceptors must not run for the refresh itself.
     refreshPromise = axios
