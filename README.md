@@ -58,7 +58,7 @@ its own origin — exactly the shape the Vite dev proxy gives locally — so the
 relaxation. `VITE_API_URL` is not used on Vercel (it only feeds the dev proxy); the rewrite
 points at the deployed API (`sanad-server-production-8573.up.railway.app`).
 
-## Current scope (Phase 4 polish — complete)
+## Current scope
 
 Everything is built against API contract **1.3.0** (`docs/API.md`) and verified live: sign-in
 (with a password visibility toggle) and session handling; a profile menu (avatar with initials,
@@ -78,9 +78,7 @@ No horizontal page scroll down to 375px.
 
 ## Screenshots
 
-Taken against the seeded server during Phase 3b, in [`docs/screenshots/`](docs/screenshots) — due
-for a refresh against the current polish pass (brand-tinted header, elevation, hover states,
-responsive layout):
+Taken against the seeded server, in [`docs/screenshots/`](docs/screenshots):
 
 | | |
 |---|---|
