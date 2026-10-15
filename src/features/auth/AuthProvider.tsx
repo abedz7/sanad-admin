@@ -25,6 +25,8 @@ export interface AuthContextValue {
   sessionExpired: boolean
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
+  /** Re-fetch /auth/me and update the session user (after a profile edit). */
+  refreshUser: () => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null)
@@ -98,9 +100,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  const refreshUser = useCallback(async () => {
+    setUser(await me())
+  }, [])
+
   const value = useMemo<AuthContextValue>(
-    () => ({ status, user, sessionExpired, signIn, signOut }),
-    [status, user, sessionExpired, signIn, signOut],
+    () => ({ status, user, sessionExpired, signIn, signOut, refreshUser }),
+    [status, user, sessionExpired, signIn, signOut, refreshUser],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

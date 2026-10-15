@@ -26,3 +26,9 @@ export async function me(): Promise<User> {
   const res = await api.get<{ data: User }>('/auth/me')
   return res.data.data
 }
+
+/** Contract 1.3.0: only the display name is editable; email is the login identity. */
+export async function updateMe(input: { name: string }): Promise<User> {
+  const res = await api.patch<{ data: User }>('/auth/me', input)
+  return res.data.data
+}
