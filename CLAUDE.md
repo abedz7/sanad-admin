@@ -14,7 +14,7 @@ zod · Tailwind CSS 4 · Radix primitives (dialog/select/tabs) for accessibility
 
 ## Architecture rules
 
-- `src/app/` (router, shell, guards) · `src/lib/` (api client, query client, env) ·
+- `src/app/` (router, shell, guards) · `src/lib/` (api client, query client, labels) ·
   `src/features/<name>/` (api.ts, hooks.ts, components/, pages/) · `src/components/ui/` and
   `src/components/states/` (one component per file, typed props) · `src/types/api.ts` (hand-written
   from docs/API.md; the single source of truth for enums).
