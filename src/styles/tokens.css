@@ -1,0 +1,74 @@
+/* Design tokens — single source of truth, see docs/DESIGN.md.
+   Components never hard-code colours; they use these variables via the Tailwind theme. */
+
+:root {
+  /* Neutrals (cool grey) */
+  --surface-0: #ffffff;
+  --surface-1: #f5f6f8;
+  --surface-2: #eceef2;
+  --border: #d9dde3;
+  --text: #1f242e;
+  --text-muted: #5c6572;
+
+  /* Accent + danger */
+  --accent: #3b5bdb;
+  --accent-hover: #364fc7;
+  --danger: #c92a2a;
+
+  /* Status — strong text colour + soft background */
+  --status-open: #1971c2;
+  --status-open-bg: #e7f1fb;
+  --status-in-progress: #9a6700;
+  --status-in-progress-bg: #faf0d7;
+  --status-resolved: #2b8a3e;
+  --status-resolved-bg: #e6f4ea;
+  --status-closed: #5c6572;
+  --status-closed-bg: #eceef2;
+
+  /* Priority */
+  --priority-low: #5c6572;
+  --priority-low-bg: #eceef2;
+  --priority-medium: #0b7285;
+  --priority-medium-bg: #e3f3f6;
+  --priority-high: #d9480f;
+  --priority-high-bg: #fcebe3;
+  --priority-urgent: #c92a2a;
+  --priority-urgent-bg: #fbe7e7;
+
+  /* Overlay shadow — the only shadow in the app */
+  --shadow-overlay: 0 8px 24px rgb(15 20 30 / 0.16);
+}
+
+/* Dark theme — a later toggle; values kept legible from day one. */
+[data-theme='dark'] {
+  --surface-0: #1c2027;
+  --surface-1: #14171c;
+  --surface-2: #262b33;
+  --border: #333a44;
+  --text: #e7eaee;
+  --text-muted: #9aa3af;
+
+  --accent: #748ffc;
+  --accent-hover: #91a7ff;
+  --danger: #ff8787;
+
+  --status-open: #74c0fc;
+  --status-open-bg: color-mix(in srgb, #1971c2 18%, transparent);
+  --status-in-progress: #ffd43b;
+  --status-in-progress-bg: color-mix(in srgb, #9a6700 22%, transparent);
+  --status-resolved: #8ce99a;
+  --status-resolved-bg: color-mix(in srgb, #2b8a3e 20%, transparent);
+  --status-closed: #9aa3af;
+  --status-closed-bg: color-mix(in srgb, #5c6572 24%, transparent);
+
+  --priority-low: #9aa3af;
+  --priority-low-bg: color-mix(in srgb, #5c6572 24%, transparent);
+  --priority-medium: #66d9e8;
+  --priority-medium-bg: color-mix(in srgb, #0b7285 22%, transparent);
+  --priority-high: #ffa94d;
+  --priority-high-bg: color-mix(in srgb, #d9480f 20%, transparent);
+  --priority-urgent: #ff8787;
+  --priority-urgent-bg: color-mix(in srgb, #c92a2a 22%, transparent);
+
+  --shadow-overlay: 0 8px 24px rgb(0 0 0 / 0.5);
+}
