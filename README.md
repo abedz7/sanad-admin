@@ -59,13 +59,24 @@ its own origin — exactly the shape the Vite dev proxy gives locally — so the
 relaxation. `VITE_API_URL` is not used on Vercel (it only feeds the dev proxy); the rewrite
 points at the deployed API (`sanad-server-production-8573.up.railway.app`).
 
-## Current scope (Phase 3a)
+## Current scope (Phase 3b)
 
-Sign-in, session handling and the app shell are fully functional against the live server, as is
-the Team panel on the dashboard (`GET /admin/users`). The stats, tickets and categories screens
-are built against the contract and intentionally render their error state (the server returns 404)
-until the server's Phase 2 endpoints land — loading, empty and error states are real, no mock data.
+Everything is built against API contract **1.1.0** (`docs/API.md`):
+
+- **Fully live today:** sign-in and session handling, app shell, category management
+  (create / edit / soft delete / show-deleted, with 409 handling), the dashboard Team panel.
+- **Built and waiting for the server:** dashboard stats, the ticket list (filters, search, sort,
+  pagination — all URL-synced) and the ticket detail (status machine controls, assignee/priority/
+  category, conversation with internal notes, authenticated attachment downloads, history
+  timeline). Until the server's ticket/stats endpoints land these screens render their real error
+  state — loading, empty and error states are genuine, no mock data.
 
 ## Screenshots
 
-_Placeholder — added once server Phase 2 provides seeded data worth showing._
+Current state, in [`docs/screenshots/`](docs/screenshots) — refreshed against the seeded server
+once the server's seed script lands:
+
+| | |
+|---|---|
+| ![Sign in](docs/screenshots/sign-in.png) | ![Dashboard](docs/screenshots/dashboard.png) |
+| ![Tickets](docs/screenshots/tickets.png) | ![Categories](docs/screenshots/categories.png) |

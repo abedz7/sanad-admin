@@ -65,3 +65,40 @@ dependency surface small.
 button walks filter history, and a filtered view can be pasted into a chat ticket. Unknown or
 invalid values are dropped on parse, so a hand-edited URL degrades to defaults instead of sending
 garbage to the API (which would 400 on unknown keys).
+
+## Vercel rewrites instead of CORS in production
+
+The deployed SPA keeps the same same-origin shape as dev: `vercel.json` rewrites `/api/:path*` to
+the API host (then falls back to `/index.html` for SPA routes). The browser never sees a second
+origin, so the `SameSite=Strict` httpOnly refresh cookie keeps working and the server needs no
+production CORS entry for the dashboard. One rule — "the client only talks to its own origin" —
+holds everywhere, which is much easier to defend than a CORS allowlist plus relaxed cookies.
+
+## Object-URL attachment downloads
+
+Attachment bytes are only served by an authenticated endpoint, so a plain `<a href>` to the API
+would arrive without the Authorization header and 401. Downloads instead go through the axios
+client (`responseType: 'blob'`), are handed to the browser via `URL.createObjectURL`, triggered
+with a synthetic anchor using the stored `originalName`, and the object URL is revoked immediately
+— no token in any URL, nothing cached beyond the click.
+
+## Debounced URL-synced search
+
+The search box debounces 300 ms and then writes `q` into the query string (with `replace: true` so
+every keystroke doesn't pollute history). The URL stays the single source of truth the query hooks
+read from — a search is shareable and survives refresh — while the debounce keeps one request per
+pause instead of one per keystroke against a rate-limited API.
+
+## No chart library
+
+The dashboard's priority breakdown is plain divs with percentage widths computed from the counts.
+A charting dependency would add hundreds of kilobytes and its own design language for what is,
+in an internal tool, a labelled bar per priority. The numbers are printed next to each bar, so the
+visualisation degrades to a table if CSS fails — and there is nothing to theme.
+
+## Route-level code splitting
+
+Every page (including sign-in) is `React.lazy`, and `src/lib/env.ts` validates with the `URL`
+constructor instead of zod so the schema library stays out of the entry chunk. The initial bundle
+carries only the shell and the router; pages arrive on first visit and are cached. This is what
+keeps `npm run build` under the bundler's 500 kB chunk warning without suppressing it.
