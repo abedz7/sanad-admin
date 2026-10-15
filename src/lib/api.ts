@@ -92,8 +92,15 @@ interface RetriableConfig extends InternalAxiosRequestConfig {
   _retried?: boolean
 }
 
-function isAuthRoute(config: InternalAxiosRequestConfig): boolean {
-  return (config.url ?? '').startsWith('/auth')
+// Only the routes where a 401 is a definitive answer, not a stale access
+// token: credentials wrong (login/register), refresh token dead (refresh),
+// or logout. /auth/me is NOT here — a 401 there just means the access token
+// expired and the silent refresh should run like for any other route.
+const NO_REFRESH_ROUTES = ['/auth/login', '/auth/register', '/auth/refresh', '/auth/logout']
+
+function isNoRefreshRoute(config: InternalAxiosRequestConfig): boolean {
+  const url = config.url ?? ''
+  return NO_REFRESH_ROUTES.some((route) => url === route || url.startsWith(`${route}?`))
 }
 
 api.interceptors.response.use(
@@ -102,7 +109,7 @@ api.interceptors.response.use(
     const config = error.config as RetriableConfig | undefined
     const status = error.response?.status
 
-    if (status === 401 && config && !config._retried && !isAuthRoute(config)) {
+    if (status === 401 && config && !config._retried && !isNoRefreshRoute(config)) {
       try {
         await refreshAccessToken()
       } catch {
