@@ -1,5 +1,15 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react'
 import { cn } from '../../lib/cn'
+import { API_ERROR_TOAST_EVENT } from '../../lib/queryClient'
 
 type ToastTone = 'info' | 'error'
 
@@ -30,6 +40,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setItems((current) => [...current, { id, message, tone }])
     setTimeout(() => setItems((current) => current.filter((item) => item.id !== id)), 5000)
   }, [])
+
+  // API errors no component handled locally (see lib/queryClient.ts).
+  useEffect(() => {
+    const onApiError = (event: Event) => toast((event as CustomEvent<string>).detail, 'error')
+    window.addEventListener(API_ERROR_TOAST_EVENT, onApiError)
+    return () => window.removeEventListener(API_ERROR_TOAST_EVENT, onApiError)
+  }, [toast])
 
   const value = useMemo(() => ({ toast }), [toast])
 
