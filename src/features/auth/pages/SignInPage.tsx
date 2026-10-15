@@ -47,7 +47,8 @@ export function SignInPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-surface-1 p-4">
       <div className="w-full max-w-sm rounded-md border border-border bg-surface-0 p-6">
-        <img src="/logo.png" alt="Sanad" className="mx-auto mb-4 h-9 w-auto" />
+        {/* Height compensates for the artwork's internal whitespace padding. */}
+        <img src="/logo.png" alt="Sanad" className="mx-auto mb-2 h-16 w-auto" />
         <h1 className="mb-4 text-center text-lg font-semibold text-text">Admin sign in</h1>
 
         {sessionExpired && (

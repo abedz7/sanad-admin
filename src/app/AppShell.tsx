@@ -15,8 +15,10 @@ export function AppShell() {
   return (
     <div className="flex min-h-screen">
       <aside className="fixed inset-y-0 left-0 flex w-60 flex-col border-r border-border bg-surface-0">
-        <div className="border-b border-border px-4 py-3">
-          <img src="/logo.png" alt="Sanad" className="h-7 w-auto" />
+        <div className="border-b border-border px-4 py-1">
+          {/* The artwork carries ~35% whitespace padding, so the rendered box is
+              larger than the visible mark (~16px high — still a mark, not a hero). */}
+          <img src="/logo.png" alt="Sanad" className="h-12 w-auto" />
         </div>
         <nav aria-label="Main" className="flex flex-col gap-0.5 p-2">
           {navItems.map((item) => (
