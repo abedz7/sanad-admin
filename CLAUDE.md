@@ -33,7 +33,20 @@ zod · Tailwind CSS 4 · Radix primitives (dialog/select/tabs) for accessibility
 - On 401: one shared refresh promise, retry the original request once; on refresh failure clear
   token + query cache and dispatch `session-expired`.
 - Sign-in shows one generic error for every 401. No `dangerouslySetInnerHTML` (lint error).
-- `.env` is gitignored; `.env.example` has placeholders only.
+- The 401→refresh interceptor skips only `/auth/login`, `/auth/register`, `/auth/refresh` and
+  `/auth/logout`; every other route, `/auth/me` included, gets the silent refresh.
+- Sign-out calls `POST /auth/logout` (needs only the cookie, not a live access token), then clears
+  the token and the query cache whatever the server answered.
+- Never log tokens, cookies or request headers; no `console.log` of API responses in committed code.
+- `withCredentials` is sent only to our own origin (`/api`), never to a third-party URL.
+- Attachments are fetched through the authenticated download endpoint with the bearer token and
+  saved via an object URL that is revoked after use. Never `<a href={apiUrl}>` to an attachment.
+- Only the status transitions the contract allows for an admin are offered in the UI; the server
+  still decides, and a 409 is rendered as a toast, never swallowed.
+- List filters, search, sort and page live in the URL (`useSearchParams`) so views are shareable.
+- `.env` is gitignored; `.env.example` has placeholders only. In production the same same-origin
+  rule holds: the host (Vercel) rewrites `/api/*` to the API server, so the cookie stays
+  `SameSite=Strict`. Never relax the cookie to make cross-site calls work.
 
 ## Engineering rules
 
