@@ -38,6 +38,8 @@
   --color-priority-urgent-bg: var(--priority-urgent-bg);
 
   --shadow-overlay: var(--shadow-overlay);
+  --shadow-elevation-1: var(--elevation-1);
+  --shadow-elevation-2: var(--elevation-2);
 }
 
 @theme {
@@ -90,6 +92,77 @@
   @media (prefers-reduced-motion: reduce) {
     .skeleton::after {
       animation: none;
+    }
+  }
+
+  /* One orchestrated reveal per page: header first, blocks stagger 40 ms. */
+  @media (prefers-reduced-motion: no-preference) {
+    .page-reveal > * {
+      animation: rise-in 0.24s ease-out both;
+    }
+    .page-reveal > *:nth-child(2) {
+      animation-delay: 40ms;
+    }
+    .page-reveal > *:nth-child(3) {
+      animation-delay: 80ms;
+    }
+    .page-reveal > *:nth-child(4) {
+      animation-delay: 120ms;
+    }
+    .page-reveal > *:nth-child(n + 5) {
+      animation-delay: 160ms;
+    }
+
+    .dialog-overlay-anim[data-state='open'] {
+      animation: fade-in 0.15s ease-out;
+    }
+    .dialog-overlay-anim[data-state='closed'] {
+      animation: fade-out 0.15s ease-in;
+    }
+    .dialog-content-anim[data-state='open'] {
+      animation: dialog-pop-in 0.15s ease-out;
+    }
+    .dialog-content-anim[data-state='closed'] {
+      animation: dialog-pop-out 0.15s ease-in;
+    }
+
+    .toast-in {
+      animation: toast-slide-in 0.2s ease-out;
+    }
+  }
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes dialog-pop-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.96);
+    }
+  }
+  @keyframes dialog-pop-out {
+    to {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.96);
+    }
+  }
+  @keyframes toast-slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(16px);
     }
   }
 }

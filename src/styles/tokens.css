@@ -37,8 +37,10 @@
   --priority-urgent: #c92a2a;
   --priority-urgent-bg: #fbe7e7;
 
-  /* Overlay shadow — the only shadow in the app */
-  --shadow-overlay: 0 8px 24px rgb(15 20 30 / 0.16);
+  /* Elevation: 1 = cards/tables (barely-there), 2 = menus/dialogs/toasts */
+  --elevation-1: 0 1px 2px rgb(15 20 30 / 0.05);
+  --elevation-2: 0 8px 24px rgb(15 20 30 / 0.16);
+  --shadow-overlay: var(--elevation-2);
 }
 
 /* Dark theme — a later toggle; values kept legible from day one. */
@@ -73,5 +75,7 @@
   --priority-urgent: #ff8787;
   --priority-urgent-bg: color-mix(in srgb, #c92a2a 22%, transparent);
 
-  --shadow-overlay: 0 8px 24px rgb(0 0 0 / 0.5);
+  --elevation-1: 0 1px 2px rgb(0 0 0 / 0.4);
+  --elevation-2: 0 8px 24px rgb(0 0 0 / 0.5);
+  --shadow-overlay: var(--elevation-2);
 }

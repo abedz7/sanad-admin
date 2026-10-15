@@ -1,27 +1,35 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { EmptyState } from '../../../components/states/EmptyState'
 import { ErrorState } from '../../../components/states/ErrorState'
 import { Skeleton } from '../../../components/states/Skeleton'
 import { PageHeader } from '../../../components/ui/PageHeader'
 import { formatHours } from '../../../lib/dates'
+import { useCountUp } from '../../../lib/useCountUp'
 import { priorityLabels, priorityOrder, statusLabels, statusOrder } from '../../../lib/labels'
-import type { Stats } from '../../../types/api'
+import type { Stats, Status } from '../../../types/api'
 import { useAdminUsers } from '../../users/hooks'
 import { useStats } from '../hooks'
 
+function StatTile({ status, count }: { status: Status; count: number }) {
+  const shown = useCountUp(count)
+  return (
+    <Link
+      to={`/tickets?status=${status}`}
+      className="p-4 transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:bg-surface-2 hover:shadow-elevation-1 motion-reduce:transform-none"
+      aria-label={`${statusLabels[status].label} tickets`}
+    >
+      <p className="text-sm text-text-muted">{statusLabels[status].label}</p>
+      <p className="mt-1 text-xl font-semibold tabular-nums text-text">{shown}</p>
+    </Link>
+  )
+}
+
 function StatTiles({ byStatus }: { byStatus: Stats['byStatus'] }) {
   return (
-    <div className="grid grid-cols-4 divide-x divide-border border border-border bg-surface-0">
+    <div className="grid grid-cols-4 divide-x divide-border border border-border bg-surface-0 shadow-elevation-1">
       {statusOrder.map((status) => (
-        <Link
-          key={status}
-          to={`/tickets?status=${status}`}
-          className="p-4 hover:bg-surface-2"
-          aria-label={`${statusLabels[status].label} tickets`}
-        >
-          <p className="text-sm text-text-muted">{statusLabels[status].label}</p>
-          <p className="mt-1 text-xl font-semibold tabular-nums text-text">{byStatus[status]}</p>
-        </Link>
+        <StatTile key={status} status={status} count={byStatus[status]} />
       ))}
     </div>
   )
@@ -30,8 +38,16 @@ function StatTiles({ byStatus }: { byStatus: Stats['byStatus'] }) {
 /** Plain divs sized from the numbers — no chart library (docs/DECISIONS.md). */
 function PriorityBars({ byPriority }: { byPriority: Stats['byPriority'] }) {
   const max = Math.max(1, ...priorityOrder.map((p) => byPriority[p]))
+  // Bars grow from 0 to their width on first paint (CSS transition; disabled
+  // by motion-reduce). Mounted flips one frame after mount.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setMounted(true))
+    return () => cancelAnimationFrame(raf)
+  }, [])
+
   return (
-    <section className="border border-border bg-surface-0 p-4">
+    <section className="border border-border bg-surface-0 p-4 shadow-elevation-1">
       <h2 className="mb-3 text-sm font-medium text-text-muted">By priority</h2>
       <dl className="flex flex-col gap-2">
         {priorityOrder.map((priority) => (
@@ -39,8 +55,8 @@ function PriorityBars({ byPriority }: { byPriority: Stats['byPriority'] }) {
             <dt className="text-sm text-text">{priorityLabels[priority].label}</dt>
             <dd className="h-4 rounded-md bg-surface-2">
               <div
-                className={`h-4 rounded-md ${priorityLabels[priority].barClassName}`}
-                style={{ width: `${(byPriority[priority] / max) * 100}%` }}
+                className={`h-4 rounded-md transition-[width] duration-500 ease-out motion-reduce:transition-none ${priorityLabels[priority].barClassName}`}
+                style={{ width: mounted ? `${(byPriority[priority] / max) * 100}%` : 0 }}
               />
             </dd>
             <dd className="text-right text-sm font-medium tabular-nums text-text">
@@ -55,7 +71,7 @@ function PriorityBars({ byPriority }: { byPriority: Stats['byPriority'] }) {
 
 function OpenAge({ openAge, createdLast7Days }: Pick<Stats, 'openAge' | 'createdLast7Days'>) {
   return (
-    <section className="border border-border bg-surface-0 p-4">
+    <section className="border border-border bg-surface-0 p-4 shadow-elevation-1">
       <h2 className="mb-3 text-sm font-medium text-text-muted">Open age</h2>
       <dl className="flex flex-col gap-2 text-base text-text">
         <div className="flex justify-between">
@@ -147,7 +163,7 @@ function TeamPanel() {
   const admins = useAdminUsers({ role: 'admin' })
 
   return (
-    <section className="border border-border bg-surface-0 p-4">
+    <section className="border border-border bg-surface-0 p-4 shadow-elevation-1">
       <h2 className="mb-3 text-sm font-medium text-text-muted">Team</h2>
       {admins.isPending && (
         <div className="flex flex-col gap-2">

@@ -20,6 +20,8 @@ interface DataTableProps<T> {
   sort?: SortKey
   onSortChange?: (sort: SortKey) => void
   onRowClick?: (row: T) => void
+  /** Class setting the row's left accent bar colour (e.g. by status). */
+  rowAccent?: (row: T) => string
 }
 
 function nextSort(field: SortField, current: SortKey | undefined): SortKey {
@@ -28,9 +30,17 @@ function nextSort(field: SortField, current: SortKey | undefined): SortKey {
   return `-${field}`
 }
 
-export function DataTable<T>({ columns, rows, rowKey, sort, onSortChange, onRowClick }: DataTableProps<T>) {
+export function DataTable<T>({
+  columns,
+  rows,
+  rowKey,
+  sort,
+  onSortChange,
+  onRowClick,
+  rowAccent,
+}: DataTableProps<T>) {
   return (
-    <div className="overflow-x-auto border-y border-border bg-surface-0">
+    <div className="overflow-x-auto border-y border-border bg-surface-0 shadow-elevation-1">
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr className="bg-surface-2 text-left">
@@ -70,8 +80,9 @@ export function DataTable<T>({ columns, rows, rowKey, sort, onSortChange, onRowC
               key={rowKey(row)}
               onClick={onRowClick ? () => onRowClick(row) : undefined}
               className={cn(
-                'border-t border-border',
-                onRowClick && 'cursor-pointer hover:bg-surface-2',
+                'border-t border-border border-l-2 border-l-transparent transition-colors duration-120 hover:bg-accent-tint/50',
+                onRowClick && 'cursor-pointer',
+                rowAccent?.(row),
               )}
             >
               {columns.map((column) => (

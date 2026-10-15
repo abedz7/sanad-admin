@@ -59,7 +59,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={item.id}
             role="status"
             className={cn(
-              'rounded-md border bg-surface-0 px-3 py-2 text-base text-text shadow-overlay',
+              'toast-in rounded-md border bg-surface-0 px-3 py-2 text-base text-text shadow-elevation-2',
               item.tone === 'error' ? 'border-danger' : 'border-border',
             )}
           >

@@ -16,6 +16,15 @@ import { useTickets } from '../hooks'
 const SORT_KEYS: SortKey[] = ['createdAt', '-createdAt', 'lastActivityAt', '-lastActivityAt', 'priority', '-priority']
 const OBJECT_ID = /^[0-9a-f]{24}$/
 
+/* Left accent bar per row, keyed by status (visual only; labels.ts stays the
+   source of truth for badge colours and transitions). */
+const statusRowAccent: Record<Status, string> = {
+  open: '[border-left-color:var(--status-open)]',
+  in_progress: '[border-left-color:var(--status-in-progress)]',
+  resolved: '[border-left-color:var(--status-resolved)]',
+  closed: '[border-left-color:var(--status-closed)]',
+}
+
 function parseEnum<T extends string>(value: string | null, allowed: readonly T[]): T | undefined {
   return allowed.includes(value as T) ? (value as T) : undefined
 }
@@ -141,6 +150,7 @@ export function TicketsPage() {
               sort={sort}
               onSortChange={(next) => updateParams({ sort: next })}
               onRowClick={(t) => void navigate(`/tickets/${t.id}`)}
+              rowAccent={(t) => statusRowAccent[t.status]}
             />
             <Pagination
               meta={tickets.data.meta}

@@ -23,7 +23,7 @@ export function AppShell() {
               end={item.end}
               className={({ isActive }) =>
                 cn(
-                  'rounded-md border-l-2 px-3 py-1.5 text-base font-medium',
+                  'rounded-md border-l-2 px-3 py-1.5 text-base font-medium transition-colors duration-120',
                   isActive
                     ? 'border-accent bg-accent-tint text-accent'
                     : 'border-transparent text-text-muted hover:bg-surface-2 hover:text-text',
@@ -39,7 +39,7 @@ export function AppShell() {
         </div>
       </aside>
       <main className="ml-60 min-w-0 flex-1">
-        <div className="mx-auto max-w-[1280px] px-6 py-5">
+        <div className="page-reveal mx-auto max-w-[1280px] px-6 py-5">
           <Outlet />
         </div>
       </main>
