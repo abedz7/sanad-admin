@@ -92,13 +92,28 @@ function StatsSection() {
 
   if (stats.isPending) {
     return (
-      <div className="grid grid-cols-4 divide-x divide-border border border-border bg-surface-0">
-        {statusOrder.map((status) => (
-          <div key={status} className="p-4">
-            <Skeleton className="h-4 w-20" />
-            <Skeleton className="mt-2 h-7 w-12" />
-          </div>
-        ))}
+      <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-4 divide-x divide-border border border-border bg-surface-0">
+          {statusOrder.map((status) => (
+            <div key={status} className="p-4">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="mt-2 h-7 w-12" />
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          {[0, 1].map((panel) => (
+            <div key={panel} className="border border-border bg-surface-0 p-4">
+              <Skeleton className="mb-3 h-4 w-24" />
+              <div className="flex flex-col gap-2">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+                <Skeleton className="h-4 w-4/6" />
+                <Skeleton className="h-4 w-3/6" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
