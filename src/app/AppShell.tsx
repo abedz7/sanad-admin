@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { Button } from '../components/ui/Button'
 import { cn } from '../lib/cn'
@@ -11,6 +12,16 @@ const navItems = [
 
 export function AppShell() {
   const { user, signOut } = useAuth()
+  const [signingOut, setSigningOut] = useState(false)
+
+  const onSignOut = async () => {
+    setSigningOut(true)
+    try {
+      await signOut()
+    } finally {
+      setSigningOut(false)
+    }
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -40,7 +51,13 @@ export function AppShell() {
         <div className="mt-auto border-t border-border p-3">
           <p className="truncate text-sm font-medium text-text">{user?.name}</p>
           <p className="truncate text-xs text-text-muted">{user?.email}</p>
-          <Button variant="secondary" size="sm" className="mt-2 w-full" onClick={() => void signOut()}>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="mt-2 w-full"
+            loading={signingOut}
+            onClick={() => void onSignOut()}
+          >
             Sign out
           </Button>
         </div>

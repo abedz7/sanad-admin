@@ -38,8 +38,9 @@ export function Button({
     <button
       type={type}
       disabled={disabled || loading}
+      aria-busy={loading || undefined}
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-md font-medium',
+        'relative inline-flex items-center justify-center rounded-md font-medium',
         'disabled:cursor-not-allowed disabled:opacity-60',
         variantClasses[variant],
         sizeClasses[size],
@@ -47,8 +48,15 @@ export function Button({
       )}
       {...rest}
     >
-      {loading && <Spinner />}
-      {children}
+      {/* Spinner overlays the hidden label so the button keeps its width. */}
+      {loading && (
+        <span className="absolute inset-0 flex items-center justify-center">
+          <Spinner />
+        </span>
+      )}
+      <span className={cn('inline-flex items-center gap-2', loading && 'invisible')}>
+        {children}
+      </span>
     </button>
   )
 }
