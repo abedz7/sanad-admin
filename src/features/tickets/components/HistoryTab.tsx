@@ -28,7 +28,9 @@ export function HistoryTab({ ticket }: { ticket: Ticket }) {
     if (field === 'priority') return priorityLabels[value as Priority]?.label ?? String(value)
     if (field === 'assigneeId') {
       const admin = admins.data?.data.find((a) => a.id === value)
-      return admin?.name ?? String(value)
+      // Events are immutable facts holding raw ids; an id that no longer
+      // resolves belongs to someone who lost the admin role since.
+      return admin?.name ?? (admins.isSuccess ? 'former admin' : String(value))
     }
     return String(value)
   }
