@@ -13,3 +13,22 @@ export async function listAdminCategories(includeDeleted = false): Promise<Admin
   })
   return res.data.data
 }
+
+export interface CategoryInput {
+  name: string
+  description?: string
+}
+
+export async function createCategory(input: CategoryInput): Promise<Category> {
+  const res = await api.post<{ data: Category }>('/admin/categories', input)
+  return res.data.data
+}
+
+export async function updateCategory(id: string, input: CategoryInput): Promise<Category> {
+  const res = await api.patch<{ data: Category }>(`/admin/categories/${id}`, input)
+  return res.data.data
+}
+
+export async function deleteCategory(id: string): Promise<void> {
+  await api.delete(`/admin/categories/${id}`)
+}
