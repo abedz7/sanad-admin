@@ -58,19 +58,29 @@ its own origin — exactly the shape the Vite dev proxy gives locally — so the
 relaxation. `VITE_API_URL` is not used on Vercel (it only feeds the dev proxy); the rewrite
 points at the deployed API (`sanad-server-production-8573.up.railway.app`).
 
-## Current scope (Phase 3b — complete, verified against the seeded server)
+## Current scope (Phase 4 polish — complete)
 
-Everything is built against API contract **1.1.0** (`docs/API.md`) and verified live: sign-in and
-session handling; dashboard with stat tiles (linked to the filtered list), priority breakdown,
-open-age block and Team panel; ticket list with URL-synced filters, debounced search, sort and
-pagination; ticket detail with status-machine controls, assignee/priority/category editing,
-conversation with internal notes, authenticated attachment downloads and the history timeline;
-category management with create/edit/soft-delete and 409 handling. Loading, empty and error states
-are real throughout — no mock data anywhere.
+Everything is built against API contract **1.3.0** (`docs/API.md`) and verified live: sign-in
+(with a password visibility toggle) and session handling; a profile menu (avatar with initials,
+editable display name via `PATCH /auth/me`, read-only email, role chip, sign out); dashboard with
+stat tiles (linked to the filtered list, count-up on first paint), priority breakdown (bars
+animating in on load), open-age block and Team panel; ticket list with URL-synced filters,
+debounced search, sort and pagination; ticket detail with status-machine controls,
+assignee/priority/category editing, conversation with internal notes, authenticated attachment
+downloads and the history timeline; category management with create/edit/soft-delete and 409
+handling. Loading, empty and error states are real throughout, now with shimmering skeletons that
+respect `prefers-reduced-motion`; every mutating action shows a width-preserving button spinner.
+
+The layout is responsive: the sidebar collapses to a top bar with a drawer menu at ≤1024px; at
+≤768px the tickets and categories tables become card lists, filters stack, the ticket detail
+control strip wraps and its tabs scroll horizontally, and dialogs go full-width with 16px gutters.
+No horizontal page scroll down to 375px.
 
 ## Screenshots
 
-Taken against the seeded server, in [`docs/screenshots/`](docs/screenshots):
+Taken against the seeded server during Phase 3b, in [`docs/screenshots/`](docs/screenshots) — due
+for a refresh against the current polish pass (brand-tinted header, elevation, hover states,
+responsive layout):
 
 | | |
 |---|---|
