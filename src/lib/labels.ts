@@ -26,12 +26,32 @@ export const priorityLabels: Record<Priority, LabelDef> = {
   urgent: { label: 'Urgent', className: 'text-priority-urgent bg-priority-urgent-bg' },
 }
 
-/** Transitions an admin may trigger from each status (contract §5). */
-export const adminTransitions: Record<Status, Status[]> = {
-  open: ['in_progress', 'closed'],
-  in_progress: ['open', 'resolved', 'closed'],
-  resolved: ['in_progress', 'closed'],
-  closed: ['open'],
+export interface AdminTransition {
+  to: Status
+  /** Verb shown on the button that triggers this transition. */
+  label: string
+}
+
+/** Transitions an admin may trigger from each status (contract §5, admin column). */
+const adminTransitions: Record<Status, AdminTransition[]> = {
+  open: [
+    { to: 'in_progress', label: 'Start working' },
+    { to: 'closed', label: 'Close' },
+  ],
+  in_progress: [
+    { to: 'resolved', label: 'Mark resolved' },
+    { to: 'open', label: 'Back to open' },
+    { to: 'closed', label: 'Close' },
+  ],
+  resolved: [
+    { to: 'in_progress', label: 'Reopen' },
+    { to: 'closed', label: 'Close' },
+  ],
+  closed: [{ to: 'open', label: 'Reopen' }],
+}
+
+export function allowedAdminTransitions(status: Status): AdminTransition[] {
+  return adminTransitions[status]
 }
 
 export const statusOrder: Status[] = ['open', 'in_progress', 'resolved', 'closed']

@@ -1,5 +1,5 @@
 /**
- * Hand-written from docs/API.md (contract v1.0.0).
+ * Hand-written from docs/API.md (contract v1.1.0).
  * Single source of truth for enums and resource shapes — keep in lockstep with the contract.
  */
 
