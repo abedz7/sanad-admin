@@ -56,8 +56,8 @@ the session truly expires.
 everything else falls back to `/index.html` (SPA routing). The browser therefore only ever calls
 its own origin — exactly the shape the Vite dev proxy gives locally — so the httpOnly
 `SameSite=Strict` refresh cookie works in production unchanged, with no CORS and no cookie
-relaxation. `VITE_API_URL` is not used on Vercel (it only feeds the dev proxy); the placeholder
-API host in `vercel.json` is replaced once the API is deployed.
+relaxation. `VITE_API_URL` is not used on Vercel (it only feeds the dev proxy); the rewrite
+points at the deployed API (`sanad-server-production-8573.up.railway.app`).
 
 ## Current scope (Phase 3a)
 
