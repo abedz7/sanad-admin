@@ -8,6 +8,35 @@ import { Input } from '../../../components/ui/Input'
 import type { ApiError } from '../../../types/api'
 import { useAuth } from '../useAuth'
 
+function EyeIcon() {
+  return (
+    <svg className="size-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M1.5 8s2.4-4.5 6.5-4.5S14.5 8 14.5 8s-2.4 4.5-6.5 4.5S1.5 8 1.5 8Z"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.3" />
+    </svg>
+  )
+}
+
+function EyeOffIcon() {
+  return (
+    <svg className="size-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M1.5 8s2.4-4.5 6.5-4.5c1.3 0 2.4.4 3.4 1M14.5 8s-2.4 4.5-6.5 4.5c-1.3 0-2.4-.4-3.4-1"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M2.5 13.5 13.5 2.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 const signInSchema = z.object({
   email: z.email({ error: 'Enter a valid email address' }),
   password: z.string().min(1, { error: 'Enter your password' }),
@@ -19,6 +48,7 @@ export function SignInPage() {
   const { status, sessionExpired, signIn } = useAuth()
   const location = useLocation()
   const [serverError, setServerError] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     register,
@@ -76,14 +106,27 @@ export function SignInPage() {
             <label htmlFor="password" className="mb-1 block text-sm font-medium text-text">
               Password
             </label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              invalid={errors.password !== undefined}
-              disabled={isSubmitting}
-              {...register('password')}
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                className="pr-9"
+                invalid={errors.password !== undefined}
+                disabled={isSubmitting}
+                {...register('password')}
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-pressed={showPassword}
+                disabled={isSubmitting}
+                onClick={() => setShowPassword((current) => !current)}
+                className="absolute inset-y-0 right-0 flex w-9 items-center justify-center rounded-md text-text-muted hover:text-text"
+              >
+                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+              </button>
+            </div>
             {errors.password && (
               <p className="mt-1 text-xs text-danger">{errors.password.message}</p>
             )}
