@@ -10,9 +10,11 @@
   --text: #1f242e;
   --text-muted: #5c6572;
 
-  /* Accent + danger */
-  --accent: #3b5bdb;
-  --accent-hover: #364fc7;
+  /* Accent (brand teal, sampled from public/logo.png) + danger.
+     tint = hover/selected backgrounds, strong = hover/pressed on solid accent. */
+  --accent: #187375;
+  --accent-strong: #105458;
+  --accent-tint: #e4f0f0;
   --danger: #c92a2a;
 
   /* Status — strong text colour + soft background */
@@ -28,8 +30,8 @@
   /* Priority */
   --priority-low: #5c6572;
   --priority-low-bg: #eceef2;
-  --priority-medium: #0b7285;
-  --priority-medium-bg: #e3f3f6;
+  --priority-medium: #4263eb;
+  --priority-medium-bg: #e9eefc;
   --priority-high: #d9480f;
   --priority-high-bg: #fcebe3;
   --priority-urgent: #c92a2a;
@@ -48,8 +50,9 @@
   --text: #e7eaee;
   --text-muted: #9aa3af;
 
-  --accent: #748ffc;
-  --accent-hover: #91a7ff;
+  --accent: #3ca6a8;
+  --accent-strong: #5cbcbe;
+  --accent-tint: color-mix(in srgb, #3ca6a8 16%, transparent);
   --danger: #ff8787;
 
   --status-open: #74c0fc;
@@ -63,8 +66,8 @@
 
   --priority-low: #9aa3af;
   --priority-low-bg: color-mix(in srgb, #5c6572 24%, transparent);
-  --priority-medium: #66d9e8;
-  --priority-medium-bg: color-mix(in srgb, #0b7285 22%, transparent);
+  --priority-medium: #91a7ff;
+  --priority-medium-bg: color-mix(in srgb, #4263eb 22%, transparent);
   --priority-high: #ffa94d;
   --priority-high-bg: color-mix(in srgb, #d9480f 20%, transparent);
   --priority-urgent: #ff8787;

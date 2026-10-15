@@ -19,9 +19,14 @@ badge is legible without borders at 12px.
 | `--border` | `#d9dde3` | `#333a44` | hairlines, input borders |
 | `--text` | `#1f242e` | `#e7eaee` | primary text |
 | `--text-muted` | `#5c6572` | `#9aa3af` | secondary text, meta, labels |
-| `--accent` | `#3b5bdb` | `#748ffc` | buttons, links, focus rings, active nav |
-| `--accent-hover` | `#364fc7` | `#91a7ff` | hover on accent |
+| `--accent` | `#187375` | `#3ca6a8` | buttons, links, focus rings, active nav — brand teal, sampled from `public/logo.png` |
+| `--accent-strong` | `#105458` | `#5cbcbe` | hover/pressed on solid accent |
+| `--accent-tint` | `#e4f0f0` | teal @ 16% | hover/selected backgrounds (nav, ghost buttons) |
 | `--danger` | `#c92a2a` | `#ff8787` | destructive actions |
+
+The logo (teal ticket-and-speech-bubble mark + "Sanad" wordmark) appears in exactly two places:
+the sign-in card and the app-shell nav header, at a modest height (~28px in the nav, ~36px on
+sign-in). It is a mark, not a hero.
 
 Status (text / soft background, light theme; dark theme uses the text colour at full strength on a
 12% alpha background of the same hue):
@@ -33,12 +38,13 @@ Status (text / soft background, light theme; dark theme uses the text colour at 
 | `--status-resolved` | `#2b8a3e` | `#e6f4ea` |
 | `--status-closed` | `#5c6572` | `#eceef2` |
 
-Priority (same pair pattern; medium is teal, deliberately not the same blue as `open`):
+Priority (same pair pattern; medium is indigo — deliberately neither the `open` blue nor the
+brand teal, so a medium-priority badge never reads as an interactive element):
 
 | Priority | Text | Background |
 |---|---|---|
 | `--priority-low` | `#5c6572` | `#eceef2` |
-| `--priority-medium` | `#0b7285` | `#e3f3f6` |
+| `--priority-medium` | `#4263eb` | `#e9eefc` |
 | `--priority-high` | `#d9480f` | `#fcebe3` |
 | `--priority-urgent` | `#c92a2a` | `#fbe7e7` |
 
@@ -109,8 +115,8 @@ Left nav fixed 240px; content area max 1280px; tables bleed to the full content 
 ## 6. Review against the generic-AI-dashboard tells (revision pass)
 
 - **Cream + serif + terracotta** — avoided: cool grey neutrals, system sans only.
-- **Near-black + neon** — avoided: dark theme is `#14171c`/`#1c2027` with desaturated accents
-  (`#748ffc`), not neon on `#000`.
+- **Near-black + neon** — avoided: dark theme is `#14171c`/`#1c2027` with a desaturated teal
+  accent (`#3ca6a8`), not neon on `#000`.
 - **Identical rounded cards with the same grey shadow** — avoided: no card shadows at all;
   hairline borders carry the structure, and tables are full-bleed rather than boxed-per-widget.
   *Revised in this pass: dashboard stat tiles were initially spec'd as four shadowed cards; they
@@ -119,9 +125,10 @@ Left nav fixed 240px; content area max 1280px; tables bleed to the full content 
   of caps for hierarchy.
 - **"→" on buttons** — avoided: buttons are plain verbs; the only glyphs in the app are sort
   carets, pagination chevrons and the dialog close ×.
-- *Also revised: first draft had the accent on `open` status equal to the button accent
-  (`#3b5bdb`); status-open is now `#1971c2` so "lots of open tickets" doesn't make the table look
-  like a wall of links.*
+- *Also revised: status and priority hues are kept disjoint from the accent — when the brand
+  accent became teal, `--priority-medium` moved from teal to indigo so "lots of medium tickets"
+  doesn't make the table look like a wall of buttons, and `--status-open` stays `#1971c2` rather
+  than the accent for the same reason.*
 
 Light is the default theme; the dark values above ship in `tokens.css` behind
 `[data-theme="dark"]` so the toggle is a later, cheap addition.
